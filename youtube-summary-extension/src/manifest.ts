@@ -46,8 +46,5 @@ export default defineManifest({
     "activeTab",
     "tabs",     
     "unlimitedStorage"
-],
-  chrome_url_overrides: {
-    newtab: 'newtab.html',
-  },
+]
 })
