@@ -8,7 +8,8 @@ export const startFileUploading = async () => {
   wait(2000);
 
   loadChunks(DESCRIPTION_FILE, data => {
-    const input = waitFor(10000, 'form textarea');
+    const input = document.querySelector('form textarea');
+    
     if (input && typeof input.value === 'string') {
       const event = new Event('input', {
         'bubbles': true,
