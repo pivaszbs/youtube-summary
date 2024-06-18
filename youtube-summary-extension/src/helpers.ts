@@ -12,3 +12,5 @@ export const waitFor = (timeout = 10000, selector: string) => new Promise<Elemen
       }
     }, 100);
   })
+
+const wait = (ms = 10000) => new Promise(resolve => setTimeout(resolve, ms));

@@ -1,5 +1,16 @@
-import { CHUNK_SIZE } from "./storage";
-import { chunkString } from "./storage";
+function chunkString(str, size) {
+    const numChunks = Math.ceil(str.length / size);
+    const chunks = new Array(numChunks);
+
+    for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+        chunks[i] = str.substr(o, size);
+    }
+
+    return chunks;
+}
+
+const CHUNK_SIZE = 4000;
+    
 
 export function loadChunks(key, callback) {
   chrome.storage.local.get(null, (items) => {
@@ -18,7 +29,9 @@ export function loadChunks(key, callback) {
 
     callback(fullString);
   });
-}export function saveChunks(key, str) {
+}
+
+export function saveChunks(key, str) {
   const chunks = chunkString(str, CHUNK_SIZE);
   const storageObj = {};
 
@@ -34,15 +47,3 @@ export function loadChunks(key, callback) {
     }
   });
 }
-export function chunkString(str, size) {
-  const numChunks = Math.ceil(str.length / size);
-  const chunks = new Array(numChunks);
-
-  for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
-    chunks[i] = str.substr(o, size);
-  }
-
-  return chunks;
-}
-export const CHUNK_SIZE = 4000;
-
