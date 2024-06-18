@@ -5,7 +5,7 @@ import { loadChunks } from "./storage";
 
 
 export const startFileUploading = async () => {
-  wait(2000);
+  await wait(5000);
 
   loadChunks(DESCRIPTION_FILE, data => {
     const input = document.querySelector('form textarea');
