@@ -1,4 +1,6 @@
 import { DESCRIPTION_FILE, TRANSCRIPTION_FILE } from "../constants";
+import { waitFor } from "../helpers";
+import { i18n } from "../translations";
 
 const wait = (ms = 10000) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -16,21 +18,6 @@ function save(filename, data) {
         document.body.removeChild(elem);
     }
 }
-
-const waitFor = (timeout = 10000, selector: string) => new Promise<Element>((resolve, reject) => {
-  if (timeout === 0) {
-    reject();
-  }
-  const timeoutId = setTimeout(() => {
-    const element = document.querySelector(selector);
-    if (!element) {
-      waitFor(timeout - 100, selector);
-    } else {
-      clearTimeout(timeoutId);
-      resolve(element);
-    }
-  }, 100);
-})
 
 const createTranscriptButton = async () => {
     const buttonContainer = await waitFor(10000, '#actions');
@@ -139,9 +126,9 @@ function loadChunks(key, callback) {
 createTranscriptButton();
 
 const startFileUploading = async () => {
-    await wait(1000)
+
     loadChunks(DESCRIPTION_FILE, data => {
-        const input = document.querySelector('form textarea');
+        const input = waitFor(10000, 'form textarea');
         if (input && typeof input.value === 'string') {
             const event = new Event('input', {
                 'bubbles': true,
@@ -149,7 +136,7 @@ const startFileUploading = async () => {
             });
             document.querySelectorAll('form button')[1].click();
     
-            input.value = `Используя описание ${data} и транскрипцию видео из файла, сделай саммари на русском с выделением основных частей в формате подробной статьи. В случае если не сможешь дать полный ответ - дай возможность продолжить работать с файлом`;
+            input.value = `${i18n.t('pre_description')} ${data} ${i18n.t('post_description')}`;
             input.dispatchEvent(event);
         }
     })
