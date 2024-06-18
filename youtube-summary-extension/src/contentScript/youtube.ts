@@ -1,6 +1,7 @@
 import { TRANSCRIPTION_FILE, DESCRIPTION_FILE } from "../constants";
 
 import { wait, waitFor } from "../helpers";
+import { createMyButton } from "./button";
 import { saveChunks } from "./storage";
 
 function save(filename, data) {
@@ -22,21 +23,9 @@ function save(filename, data) {
 export const createTranscriptButton = async () => {
   const buttonContainer = await waitFor(10000, '#actions');
 
-  const transcriptButton = document.createElement('button');
-  transcriptButton.innerText = 'Summary';
-  transcriptButton.style.padding = '8px';
-  transcriptButton.style.margin = '4px';
-  transcriptButton.style.backgroundColor = '#FF0000';
-  transcriptButton.style.color = '#FFFFFF';
-  transcriptButton.style.border = 'none';
-  transcriptButton.style.borderRadius = '4px';
-  transcriptButton.style.cursor = 'pointer';
+  const transcriptButton = createMyButton({ text: 'Summary', onClick: openTranscript })
 
   buttonContainer.appendChild(transcriptButton);
-
-  transcriptButton.addEventListener('click', () => {
-    openTranscript();
-  });
 };
 
 export const openTranscript = () => {

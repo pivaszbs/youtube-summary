@@ -2,15 +2,19 @@ export const waitFor = (timeout = 10000, selector: string) => new Promise<Elemen
     if (timeout === 0) {
       reject();
     }
-    const timeoutId = setTimeout(() => {
-      const element = document.querySelector(selector);
-      if (!element) {
-        waitFor(timeout - 100, selector);
-      } else {
-        clearTimeout(timeoutId);
-        resolve(element);
-      }
-    }, 100);
+
+    const createTimeout = (timeout: number) => {
+        setTimeout(() => {
+            const element = document.querySelector(selector);
+            if (!element) {
+                createTimeout(timeout - 100);
+            } else {;
+                resolve(element);
+            }
+        }, 100);
+    }
+
+    createTimeout(timeout);
   })
 
 export const wait = (ms = 10000) => new Promise(resolve => setTimeout(resolve, ms));
