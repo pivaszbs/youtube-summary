@@ -1,6 +1,5 @@
-import { wait } from ".";
 import { DESCRIPTION_FILE } from "../constants";
-import { waitFor } from "../helpers";
+import { wait, waitFor } from "../helpers";
 import { i18n } from "../translations";
 import { loadChunks } from "./storage";
 

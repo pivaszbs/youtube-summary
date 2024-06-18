@@ -1,7 +1,6 @@
-import { wait } from ".";
 import { TRANSCRIPTION_FILE, DESCRIPTION_FILE } from "../constants";
 
-import { waitFor } from "../helpers";
+import { wait, waitFor } from "../helpers";
 import { saveChunks } from "./storage";
 
 function save(filename, data) {
