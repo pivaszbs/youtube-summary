@@ -15,6 +15,8 @@ export const startFileUploading = async () => {
       });
       document.querySelectorAll('form button')[1].click();
 
+      i18n.locale = window.navigator.language;
+
       input.value = `${i18n.t('pre_description')} ${data} ${i18n.t('post_description')}`;
       input.dispatchEvent(event);
     }
