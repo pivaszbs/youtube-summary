@@ -1,6 +1,6 @@
 import { DESCRIPTION_FILE, TRANSCRIPTION_FILE } from "../constants";
 
-const wait = (ms = 10000) => new Promise(resolve => setTimeout(resolve, ms))
+const wait = (ms = 10000) => new Promise(resolve => setTimeout(resolve, ms));
 
 function save(filename, data) {
     const blob = new Blob([data], {type: 'text/plain'});
@@ -17,13 +17,23 @@ function save(filename, data) {
     }
 }
 
+const waitFor = (timeout = 10000, selector: string) => new Promise<Element>((resolve, reject) => {
+  if (timeout === 0) {
+    reject();
+  }
+  const timeoutId = setTimeout(() => {
+    const element = document.querySelector(selector);
+    if (!element) {
+      waitFor(timeout - 100, selector);
+    } else {
+      clearTimeout(timeoutId);
+      resolve(element);
+    }
+  }, 100);
+})
+
 const createTranscriptButton = async () => {
-    console.log(chrome.runtime.getManifest().permissions)
-    console.log('hello')
-    await wait(3000);
-    const buttonContainer = document.querySelector('#actions');
-    console.log(buttonContainer)
-    if (!buttonContainer) return;
+    const buttonContainer = await waitFor(10000, '#actions');
   
     const transcriptButton = document.createElement('button');
     transcriptButton.innerText = 'Summary';
@@ -127,33 +137,6 @@ function loadChunks(key, callback) {
 }
 
 createTranscriptButton();
-// loadChunks(STORAGE_KEY, async data => {
-//     await wait(1000)
-//     const input = document.querySelector('form textarea');
-//     if (input && typeof input.value === 'string') {
-//         const event = new Event('input', {
-//             'bubbles': true,
-//             'cancelable': true
-//         });
-//         input.value = `Мне нужно саммари этого видео на русском в виде статьи с выделением основных частей\n ${data}`;
-//         const enterEvent = new KeyboardEvent('keydown', {
-//             key: 'Enter',
-//             keyCode: 13, // Enter key code
-//             code: 'Enter',
-//             which: 13,
-//             metaKey: true, // Meta key is pressed
-//             shiftKey: false,
-//             ctrlKey: false,
-//             altKey: false,
-//             bubbles: true, // Event will bubble up through the DOM
-//             cancelable: true // Event can be canceled
-//         });
-//         input.dispatchEvent(event);
-//         input.focus();
-//         input.dispatchEvent(enterEvent)
-//         document.querySelector('button[data-testid="fruitjuice-send-button"]').click()
-//     }
-// })
 
 const startFileUploading = async () => {
     await wait(1000)
