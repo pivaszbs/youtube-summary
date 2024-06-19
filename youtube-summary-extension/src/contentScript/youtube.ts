@@ -1,6 +1,7 @@
 import { TRANSCRIPTION_FILE, DESCRIPTION_FILE } from "../constants";
 
 import { wait, waitFor } from "../helpers";
+import { tryToSendMessage } from "./broadcast";
 import { createMyButton } from "./button";
 import { saveChunks } from "./storage";
 
@@ -50,11 +51,8 @@ export const openTranscript = () => {
           const transcript = transcriptText.join('\n');
           const description = descriptionText.join('\n');
 
-          await saveChunks(TRANSCRIPTION_FILE, transcript);
-          await saveChunks(DESCRIPTION_FILE, description);
-          save(TRANSCRIPTION_FILE, transcript);
-          // wait for starting downloading
-          await wait(500);
+          tryToSendMessage(transcript, TRANSCRIPTION_FILE);
+          tryToSendMessage(description, DESCRIPTION_FILE);
 
           chrome.runtime.sendMessage({ action: 'openChatGPT' });
         }, 2000);

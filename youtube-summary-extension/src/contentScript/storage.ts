@@ -1,4 +1,6 @@
-function chunkString(str, size) {
+const CHUNK_SIZE = 4000;
+
+export function chunkString(str: string, size = CHUNK_SIZE) {
     const numChunks = Math.ceil(str.length / size);
     const chunks = new Array(numChunks);
 
@@ -7,10 +9,7 @@ function chunkString(str, size) {
     }
 
     return chunks;
-}
-
-const CHUNK_SIZE = 4000;
-    
+}   
 
 export function loadChunks(key, callback) {
   chrome.storage.local.get(null, (items) => {

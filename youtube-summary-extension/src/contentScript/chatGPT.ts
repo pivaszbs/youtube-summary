@@ -1,45 +1,42 @@
-import { DESCRIPTION_FILE, TRANSCRIPTION_FILE } from "../constants";
-import { wait } from "../helpers";
+import { DESCRIPTION_FILE, SECRET_KEYWORD, TRANSCRIPTION_FILE } from "../constants";
 import { i18n } from "../translations";
-import { loadChunks } from "./storage";
+import { tryToRecieveMessage } from "./broadcast";
+
 
 export const startFileUploading = async () => {
-  await wait(5000);
-
-  loadChunks(DESCRIPTION_FILE, async data => {
-    const input = document.querySelector('form textarea');
-    
-    if (input && typeof input.value === 'string') {
-        console.log('hello')
+    const onFocus = async () => {
+        console.log(`hello from ${SECRET_KEYWORD}`)
+        const input = document.querySelector('form textarea');
         const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
-        const onFocus = async () => {
-            const [fileHandle] = await window.showOpenFilePicker();
-            const file = await fileHandle.getFile();
+        const transcription = await tryToRecieveMessage(TRANSCRIPTION_FILE);
+        const description = await tryToRecieveMessage(DESCRIPTION_FILE);
 
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
+        console.log(transcription)
 
-            fileInput.files = dataTransfer.files;
+        const file = new File([new Blob([String(transcription)], { type: 'text/plain' })], TRANSCRIPTION_FILE);
 
-            i18n.locale = window.navigator.language
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
 
-            input.value = `${i18n.t('pre_description')}: \n"${data}"\n ${i18n.t('post_description')}`;
-            input.dispatchEvent(new Event('input', {
-                'bubbles': true,
-                'cancelable': true
-            }))
+        fileInput.files = dataTransfer.files;
 
-            fileInput.dispatchEvent(new Event('change', {
-                'bubbles': true,
-                'cancelable': true
-            }));
+        i18n.locale = window.navigator.language
 
-            document.removeEventListener('click', onFocus);
-            document.removeEventListener('focus', onFocus);
-        }
+        input.value = `${i18n.t('pre_description')}: \n"${description}"\n ${i18n.t('post_description')}`;
+        input.dispatchEvent(new Event('input', {
+            'bubbles': true,
+            'cancelable': true
+        }))
 
-        document.addEventListener('click', onFocus);
-        document.addEventListener('focus', onFocus);
+        fileInput.dispatchEvent(new Event('change', {
+            'bubbles': true,
+            'cancelable': true
+        }));
+
+        document.removeEventListener('click', onFocus);
+        document.removeEventListener('focus', onFocus);
     }
-  });
+
+    document.addEventListener('click', onFocus);
+    document.addEventListener('focus', onFocus);
 };
