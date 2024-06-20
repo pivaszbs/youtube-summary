@@ -46,3 +46,11 @@ export function saveChunks(key, str) {
     }
   });
 }
+
+export const set = (key: string, value: any) => {
+  return chrome.storage.local.set({ [key]: value })
+}
+
+export const get = (key: string) => {
+  return chrome.storage.local.get(key)
+}

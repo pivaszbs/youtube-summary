@@ -2,6 +2,7 @@ import { DESCRIPTION_FILE, SECRET_KEYWORD, TRANSCRIPTION_FILE } from "../constan
 import { wait, waitFor } from "../helpers";
 import { i18n } from "../translations";
 import { tryToRecieveMessage } from "./broadcast";
+import { get } from "./storage";
 
 
 export const startFileUploading = async () => {
@@ -20,7 +21,7 @@ export const startFileUploading = async () => {
 
     fileInput.files = dataTransfer.files;
 
-    i18n.locale = window.navigator.language
+    i18n.locale = (await get('locale')).locale || window.navigator.language
 
     input.value = `${i18n.t('pre_description')}: \n"${description}"\n ${i18n.t('post_description')}`;
     input.dispatchEvent(new Event('input', {
