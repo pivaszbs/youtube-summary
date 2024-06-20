@@ -5,7 +5,7 @@ const en = {
     post_description: "And the transcription of the video from the file, make a summary in English with highlighting the main parts in the form of a detailed article. If you are unable to provide a complete response, give the opportunity to continue working with the file."
 };
 
-export const i18n = new I18n({
+const locales = {
     en,
     'en-US': en,
     'en-GB': en,
@@ -13,4 +13,8 @@ export const i18n = new I18n({
         pre_description: 'Используя описание',
         post_description: 'и транскрипцию видео из файла, сделай саммари на русском с выделением основных частей в формате подробной статьи. В случае если не сможешь дать полный ответ - дай возможность продолжить работать с файлом'
     },
-});
+};
+
+export const i18n = new I18n(locales);
+
+export const availableLocales = Object.keys(locales)
