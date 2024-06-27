@@ -2,8 +2,7 @@ import { DESCRIPTION_FILE, SECRET_KEYWORD, TRANSCRIPTION_FILE } from "../constan
 import { wait, waitFor } from "../helpers";
 import { i18n } from "../translations";
 import { tryToRecieveMessage } from "./broadcast";
-import { get } from "./storage";
-
+import { get, set } from "./storage";
 
 export const startFileUploading = async () => {
     await waitFor(10000, 'button[data-testid="fruitjuice-send-button"]')
@@ -38,3 +37,15 @@ export const startFileUploading = async () => {
     const button = await waitFor(10000, 'button[data-testid="fruitjuice-send-button"]:not(:disabled)') as HTMLButtonElement;
     button.click();
 };
+
+const handleVisibilityChange = async (event) => {
+    console.log('hello');
+    console.log(event)
+    const check = await get(SECRET_KEYWORD);
+    if (check[SECRET_KEYWORD] === 1) {
+        set(SECRET_KEYWORD, 0);
+        startFileUploading();
+    }
+}
+
+document.addEventListener("visibilitychange", handleVisibilityChange, false);
